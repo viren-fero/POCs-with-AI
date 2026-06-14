@@ -225,7 +225,7 @@ export const store = reactive({
     if (order) order.vendorBillApproved = true;
   },
 
-  isDarkMode: true,
+  isDarkMode: false,
   toggleTheme() {
     store.isDarkMode = !store.isDarkMode;
     const root = document.documentElement;
@@ -242,7 +242,7 @@ export const store = reactive({
 // Initialize theme on app load
 if (typeof window !== 'undefined') {
   const savedTheme = localStorage.getItem('theme');
-  const isDark = savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = savedTheme === 'dark';
   store.isDarkMode = isDark;
   if (isDark) {
     document.documentElement.classList.add('p-dark');
@@ -250,4 +250,3 @@ if (typeof window !== 'undefined') {
     document.documentElement.classList.remove('p-dark');
   }
 }
-

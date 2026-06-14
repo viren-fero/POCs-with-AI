@@ -31,7 +31,22 @@
     </div>
 
     <!-- 1. KPI Summary Grid -->
-    <div class="kpi-grid mb-6">
+    <div v-if="isDashboardLoading" class="kpi-grid mb-6">
+      <Card v-for="item in 4" :key="`kpi-skeleton-${item}`" class="kpi-card skeleton-card">
+        <template #content>
+          <div class="kpi-skeleton">
+            <div>
+              <span class="skeleton-line short"></span>
+              <span class="skeleton-line value"></span>
+            </div>
+            <span class="skeleton-icon"></span>
+            <span class="skeleton-line full"></span>
+          </div>
+        </template>
+      </Card>
+    </div>
+
+    <div v-else class="kpi-grid mb-6">
       <!-- Card 1: Pending Dispatch -->
       <Card class="kpi-card flex-1">
         <template #content>
@@ -39,7 +54,7 @@
             <div class="kpi-topline">
               <div class="kpi-info-stack">
                 <span class="kpi-title">Pending Dispatch</span>
-                <span class="kpi-value">{{ pendingCount }}</span>
+                <span class="kpi-value">{{ animatedPendingCount }}</span>
               </div>
               <div class="kpi-icon-box orange">
                 <i class="pi pi-clock"></i>
@@ -60,7 +75,7 @@
             <div class="kpi-topline">
               <div class="kpi-info-stack">
                 <span class="kpi-title">Active Transits</span>
-                <span class="kpi-value">{{ activeCount }}</span>
+                <span class="kpi-value">{{ animatedActiveCount }}</span>
               </div>
               <div class="kpi-icon-box blue">
                 <i class="pi pi-sync"></i>
@@ -81,7 +96,7 @@
             <div class="kpi-topline">
               <div class="kpi-info-stack">
                 <span class="kpi-title">Completed Legs</span>
-                <span class="kpi-value">{{ completedCount }}</span>
+                <span class="kpi-value">{{ animatedCompletedCount }}</span>
               </div>
               <div class="kpi-icon-box completed">
                 <i class="pi pi-check-circle"></i>
@@ -102,7 +117,7 @@
             <div class="kpi-topline">
               <div class="kpi-info-stack">
                 <span class="kpi-title">Total Billed Revenue</span>
-                <span class="kpi-value">{{ totalRevenue.toLocaleString() }} AED</span>
+                <span class="kpi-value">{{ animatedTotalRevenue.toLocaleString() }} AED</span>
               </div>
               <div class="kpi-icon-box navy">
                 <i class="pi pi-wallet"></i>
@@ -118,7 +133,26 @@
     </div>
 
     <!-- 2. Middle Section: Charts Grid (PrimeVue Charts) -->
-    <div class="charts-grid mb-6">
+    <div v-if="isDashboardLoading" class="charts-grid mb-6">
+      <Card v-for="item in 3" :key="`chart-skeleton-${item}`" class="chart-card skeleton-card">
+        <template #content>
+          <div class="chart-skeleton">
+            <div class="chart-skeleton-header">
+              <span class="skeleton-line title"></span>
+              <span class="skeleton-chip"></span>
+            </div>
+            <span class="skeleton-chart"></span>
+            <div class="chart-skeleton-footer">
+              <span class="skeleton-line mini"></span>
+              <span class="skeleton-line mini"></span>
+              <span class="skeleton-line mini"></span>
+            </div>
+          </div>
+        </template>
+      </Card>
+    </div>
+
+    <div v-else class="charts-grid mb-6">
       <!-- Chart Column 1: Doughnut Chart -->
       <Card class="chart-card allocation-card flex-1">
         <template #content>
@@ -139,7 +173,7 @@
                 class="donut-chart"
               />
               <div class="donut-center">
-                <span>{{ store.orders.length }}</span>
+                <span>{{ animatedTotalTrips }}</span>
                 <small>Total</small>
               </div>
             </div>
@@ -148,21 +182,21 @@
               <div class="allocation-row">
                 <span class="legend-dot navy"></span>
                 <div>
-                  <strong>{{ completedCount }}</strong>
+                  <strong>{{ animatedCompletedCount }}</strong>
                   <small>Completed</small>
                 </div>
               </div>
               <div class="allocation-row">
                 <span class="legend-dot orange"></span>
                 <div>
-                  <strong>{{ activeCount }}</strong>
+                  <strong>{{ animatedActiveCount }}</strong>
                   <small>In transit</small>
                 </div>
               </div>
               <div class="allocation-row">
                 <span class="legend-dot neutral"></span>
                 <div>
-                  <strong>{{ pendingCount }}</strong>
+                  <strong>{{ animatedPendingCount }}</strong>
                   <small>Pending</small>
                 </div>
               </div>
@@ -211,7 +245,7 @@
               <span class="chart-subtitle">Billed value across recent operating periods</span>
             </div>
             <div class="chart-total">
-              <strong>{{ totalRevenue.toLocaleString() }}</strong>
+              <strong>{{ animatedTotalRevenue.toLocaleString() }}</strong>
               <span>AED billed</span>
             </div>
           </div>
@@ -234,7 +268,18 @@
     </div>
 
     <!-- 3. Bottom Section: 2-Column Datatable Layout -->
-    <div class="bottom-tables-grid">
+    <div v-if="isDashboardLoading" class="bottom-tables-grid">
+      <Card v-for="item in 2" :key="`table-skeleton-${item}`" class="table-card skeleton-card">
+        <template #content>
+          <div class="table-skeleton">
+            <span class="skeleton-line title"></span>
+            <span v-for="row in 4" :key="row" class="skeleton-row"></span>
+          </div>
+        </template>
+      </Card>
+    </div>
+
+    <div v-else class="bottom-tables-grid">
       <!-- Left Column Table: Active Movement Pool -->
       <Card class="table-card flex-1">
         <template #content>
@@ -316,11 +361,13 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeUnmount, onMounted, watch } from 'vue';
 import { store } from '../../../store';
 
 const modalityFilter = ref('all');
 const selectedBranch = ref('Dubai Main Hub');
+const isDashboardLoading = ref(true);
+let loadingTimer;
 
 const modalityOptions = [
   { label: 'All Modalities', value: 'all' },
@@ -344,6 +391,45 @@ const totalRevenue = computed(() => {
     .filter(o => o.status === 'Completed')
     .reduce((sum, o) => sum + o.rate, 0);
 });
+
+const useAnimatedNumber = (source, duration = 850) => {
+  const output = ref(0);
+  let frameId;
+
+  const animate = (target) => {
+    cancelAnimationFrame(frameId);
+
+    const start = output.value;
+    const change = target - start;
+    const startedAt = performance.now();
+
+    const tick = (now) => {
+      const progress = Math.min((now - startedAt) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      output.value = Math.round(start + change * eased);
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(tick);
+      }
+    };
+
+    frameId = requestAnimationFrame(tick);
+  };
+
+  watch(source, (value) => animate(value), { immediate: true });
+
+  onBeforeUnmount(() => {
+    cancelAnimationFrame(frameId);
+  });
+
+  return output;
+};
+
+const animatedPendingCount = useAnimatedNumber(pendingCount);
+const animatedActiveCount = useAnimatedNumber(activeCount);
+const animatedCompletedCount = useAnimatedNumber(completedCount);
+const animatedTotalRevenue = useAnimatedNumber(totalRevenue, 1000);
+const animatedTotalTrips = useAnimatedNumber(computed(() => store.orders.length));
 
 const filteredOrders = computed(() => {
   if (modalityFilter.value === 'all') return store.orders;
@@ -369,6 +455,16 @@ const getStatusSeverity = (status) => {
 const todayDateString = computed(() => {
   const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   return new Date().toLocaleDateString('en-US', options);
+});
+
+onMounted(() => {
+  loadingTimer = window.setTimeout(() => {
+    isDashboardLoading.value = false;
+  }, 520);
+});
+
+onBeforeUnmount(() => {
+  window.clearTimeout(loadingTimer);
 });
 
 // Computed Reactivity for Theme Changes inside Chart configs
@@ -948,6 +1044,126 @@ const areaChartOptions = computed(() => {
 
 .table-card {
   height: 100%;
+}
+
+.skeleton-card {
+  overflow: hidden;
+}
+
+.skeleton-card::after {
+  display: none;
+}
+
+.kpi-skeleton,
+.chart-skeleton,
+.table-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.kpi-skeleton {
+  min-height: 96px;
+  display: grid;
+  grid-template-columns: 1fr 36px;
+  align-items: start;
+}
+
+.kpi-skeleton .full {
+  grid-column: 1 / -1;
+}
+
+.chart-skeleton {
+  min-height: 284px;
+}
+
+.chart-skeleton-header,
+.chart-skeleton-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.table-skeleton {
+  min-height: 190px;
+}
+
+.skeleton-line,
+.skeleton-icon,
+.skeleton-chip,
+.skeleton-chart,
+.skeleton-row {
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--surface-c), #ffffff, var(--surface-c));
+  background-size: 220% 100%;
+  animation: skeleton-sheen 1.2s ease-in-out infinite;
+}
+
+.p-dark .skeleton-line,
+.p-dark .skeleton-icon,
+.p-dark .skeleton-chip,
+.p-dark .skeleton-chart,
+.p-dark .skeleton-row {
+  background: linear-gradient(90deg, var(--surface-c), rgba(255,255,255,0.08), var(--surface-c));
+  background-size: 220% 100%;
+}
+
+.skeleton-line {
+  height: 12px;
+  width: 100%;
+}
+
+.skeleton-line.short {
+  width: 118px;
+}
+
+.skeleton-line.value {
+  width: 74px;
+  height: 26px;
+  margin-top: 10px;
+}
+
+.skeleton-line.title {
+  width: 180px;
+  height: 14px;
+}
+
+.skeleton-line.mini {
+  width: 82px;
+  height: 10px;
+}
+
+.skeleton-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+.skeleton-chip {
+  width: 52px;
+  height: 22px;
+}
+
+.skeleton-chart {
+  flex: 1;
+  min-height: 210px;
+  border-radius: 10px;
+}
+
+.skeleton-row {
+  height: 34px;
+  border-radius: 7px;
+}
+
+@keyframes skeleton-sheen {
+  0% {
+    background-position: 120% 0;
+  }
+  100% {
+    background-position: -120% 0;
+  }
 }
 
 .lane-display {
