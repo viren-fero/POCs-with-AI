@@ -16,16 +16,6 @@
             />
           </div>
 
-          <!-- Modality Filter Dropdown -->
-          <div class="filter-dropdown-wrapper flex-row align-center gap-2">
-            <span class="text-xs font-semibold text-muted">Modality:</span>
-            <Select 
-              v-model="selectedModality" 
-              :options="modalityOptions" 
-              class="p-inputtext-sm w-28"
-            />
-          </div>
-
           <!-- Client Filter Dropdown -->
           <div class="filter-dropdown-wrapper flex-row align-center gap-2">
             <span class="text-xs font-semibold text-muted">Client:</span>
@@ -282,8 +272,11 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import { store } from '../../../store';
 import AddOrderDialog from './components/AddOrderDialog.vue';
+
+const route = useRoute();
 
 const statuses = ['All', 'Pending Dispatch', 'Dispatched', 'Completed'];
 const activeStatusFilter = ref('All');
@@ -301,11 +294,26 @@ const uniqueClients = computed(() => {
   return ['All', ...new Set(clients)];
 });
 
+const syncModalityWithQuery = () => {
+  const queryType = route.query.type;
+  if (queryType === 'FTL' || queryType === 'FCL') {
+    selectedModality.value = queryType;
+  } else {
+    selectedModality.value = 'All';
+  }
+};
+
 // Set initial selection
 onMounted(() => {
+  syncModalityWithQuery();
   if (store.orders.length > 0) {
     selectedOrder.value = store.orders[0];
   }
+});
+
+// Watch query parameters
+watch(() => route.query.type, () => {
+  syncModalityWithQuery();
 });
 
 const filteredOrders = computed(() => {

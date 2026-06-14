@@ -23,10 +23,13 @@
             <i class="pi pi-map"></i>
             <span>Control Tower</span>
           </router-link>
-          <router-link to="/admin/orders" class="nav-item" active-class="active"
-            v-tooltip.right="isSidebarCollapsed ? 'Order Management' : null">
-            <i class="pi pi-list"></i>
-            <span>Order Management</span>
+          <router-link to="/admin/orders?type=FTL" class="nav-item" active-class="none" exact-active-class="none" :class="{ 'active': route.path === '/admin/orders' && route.query.type === 'FTL' }" v-tooltip.right="isSidebarCollapsed ? 'FTL Orders (Full Truck Load)' : null">
+            <i class="pi pi-truck"></i>
+            <span>FTL Orders</span>
+          </router-link>
+          <router-link to="/admin/orders?type=FCL" class="nav-item" active-class="none" exact-active-class="none" :class="{ 'active': route.path === '/admin/orders' && route.query.type === 'FCL' }" v-tooltip.right="isSidebarCollapsed ? 'FCL Orders (Full Container Load)' : null">
+            <i class="pi pi-box"></i>
+            <span>FCL Orders</span>
           </router-link>
           <router-link to="/admin/scheduling" class="nav-item" active-class="active"
             v-tooltip.right="isSidebarCollapsed ? 'Trip Scheduling' : null">
@@ -177,9 +180,11 @@ const username = computed(() => {
 
 // Dynamic Header Title
 const currentViewTitle = computed(() => {
+  if (route.name === 'admin-orders') {
+    return route.query.type === 'FCL' ? 'FCL Order Management (Full Container Load)' : 'FTL Order Management (Full Truck Load)';
+  }
   switch (route.name) {
     case 'admin-dashboard': return 'Operations Dashboard';
-    case 'admin-orders': return 'Order Management';
     case 'admin-scheduling': return 'Trip Scheduling';
     case 'admin-control-tower': return 'Control Tower';
     case 'admin-invoices': return 'Billing & Settlement';
