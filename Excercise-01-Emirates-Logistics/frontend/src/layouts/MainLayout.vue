@@ -4,7 +4,8 @@
     <aside class="layout-sidebar" :class="{ 'collapsed': isSidebarCollapsed }">
       <div class="sidebar-header">
         <div class="logo-wrapper">
-          <img v-if="!isSidebarCollapsed" src="/src/assets/emirates-logistics-logo.svg" alt="Emirates Logistics" class="brand-logo" />
+          <img v-if="!isSidebarCollapsed" src="/src/assets/emirates-logistics-logo.svg" alt="Emirates Logistics"
+            class="brand-logo" />
           <div v-else class="collapsed-logo-badge">EL</div>
         </div>
       </div>
@@ -12,23 +13,28 @@
       <nav class="sidebar-nav">
         <!-- Admin Navigation -->
         <template v-if="role === 'admin'">
-          <router-link to="/admin/dashboard" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Operations Dashboard' : null">
+          <router-link to="/admin/dashboard" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Operations Dashboard' : null">
             <i class="pi pi-chart-bar"></i>
             <span>Operations Dashboard</span>
           </router-link>
-          <router-link to="/admin/orders" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Order Management' : null">
-            <i class="pi pi-list"></i>
-            <span>Order Management</span>
-          </router-link>
-          <router-link to="/admin/scheduling" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Trip Scheduling' : null">
-            <i class="pi pi-send"></i>
-            <span>Trip Scheduling</span>
-          </router-link>
-          <router-link to="/admin/control-tower" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Control Tower' : null">
+          <router-link to="/admin/control-tower" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Control Tower' : null">
             <i class="pi pi-map"></i>
             <span>Control Tower</span>
           </router-link>
-          <router-link to="/admin/invoices" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Billing & Settlement' : null">
+          <router-link to="/admin/orders" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Order Management' : null">
+            <i class="pi pi-list"></i>
+            <span>Order Management</span>
+          </router-link>
+          <router-link to="/admin/scheduling" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Trip Scheduling' : null">
+            <i class="pi pi-send"></i>
+            <span>Trip Scheduling</span>
+          </router-link>
+          <router-link to="/admin/invoices" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Billing & Settlement' : null">
             <i class="pi pi-receipt"></i>
             <span>Billing & Settlement</span>
           </router-link>
@@ -36,11 +42,13 @@
 
         <!-- Customer Navigation -->
         <template v-else-if="role === 'customer'">
-          <router-link to="/customer/dashboard" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Booking Portal' : null">
+          <router-link to="/customer/dashboard" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Booking Portal' : null">
             <i class="pi pi-shopping-cart"></i>
             <span>Booking Portal</span>
           </router-link>
-          <router-link to="/customer/orders" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Shipment Tracking' : null">
+          <router-link to="/customer/orders" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Shipment Tracking' : null">
             <i class="pi pi-box"></i>
             <span>Shipment Tracking</span>
           </router-link>
@@ -48,11 +56,13 @@
 
         <!-- Vendor Navigation -->
         <template v-else-if="role === 'vendor'">
-          <router-link to="/vendor/dashboard" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Trip Execution' : null">
+          <router-link to="/vendor/dashboard" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Trip Execution' : null">
             <i class="pi pi-truck"></i>
             <span>Trip Execution</span>
           </router-link>
-          <router-link to="/vendor/fleet" class="nav-item" active-class="active" v-tooltip.right="isSidebarCollapsed ? 'Fleet Management' : null">
+          <router-link to="/vendor/fleet" class="nav-item" active-class="active"
+            v-tooltip.right="isSidebarCollapsed ? 'Fleet Management' : null">
             <i class="pi pi-users"></i>
             <span>Fleet Management</span>
           </router-link>
@@ -76,36 +86,25 @@
     <div class="layout-main">
       <header class="layout-header">
         <div class="header-left">
-          <Button 
-            @click="isSidebarCollapsed = !isSidebarCollapsed" 
-            :icon="isSidebarCollapsed ? 'pi pi-bars' : 'pi pi-align-left'" 
+          <Button @click="isSidebarCollapsed = !isSidebarCollapsed"
+            :icon="isSidebarCollapsed ? 'pi pi-bars' : 'pi pi-align-left'"
             class="p-button-rounded p-button-text p-button-secondary sidebar-toggle-btn"
-            :title="isSidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'"
-          />
+            :title="isSidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'" />
           <span class="view-title">{{ currentViewTitle }}</span>
         </div>
         <div class="header-right">
           <!-- Quick Role Selector using PrimeVue Select -->
           <div class="demo-switcher flex align-center gap-2">
             <span class="switcher-label">Demo Persona:</span>
-            <Select 
-              v-model="store.currentUser" 
-              :options="roleOptions" 
-              optionLabel="label" 
-              optionValue="value"
-              @change="switchRole" 
-              class="role-select"
-            />
+            <Select v-model="store.currentUser" :options="roleOptions" optionLabel="label" optionValue="value"
+              @change="switchRole" class="role-select" />
           </div>
 
           <!-- Theme Switcher -->
-          <Button 
-            @click="store.toggleTheme()" 
-            :icon="store.isDarkMode ? 'pi pi-sun' : 'pi pi-moon'" 
+          <Button @click="store.toggleTheme()" :icon="store.isDarkMode ? 'pi pi-sun' : 'pi pi-moon'"
             class="p-button-rounded p-button-text p-button-secondary theme-toggle-btn"
-            :title="store.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
-          />
-          
+            :title="store.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'" />
+
           <button @click="logout" class="logout-btn">
             <i class="pi pi-sign-out"></i>
             <span>Logout</span>
