@@ -483,6 +483,7 @@ const logout = () => {
   font-size: 13px;
 }
 
+.tour-btn,
 .logout-btn {
   display: flex;
   align-items: center;
@@ -496,6 +497,17 @@ const logout = () => {
   padding: 8px 12px;
   border-radius: 6px;
   transition: all 0.2s ease;
+}
+
+.tour-btn {
+  color: var(--brand-navy);
+  background: rgba(5, 18, 88, 0.035);
+}
+
+.tour-btn:hover {
+  background: rgba(254, 150, 5, 0.08);
+  border-color: rgba(254, 150, 5, 0.3);
+  color: var(--brand-orange);
 }
 
 .logout-btn:hover {
@@ -522,4 +534,5 @@ const logout = () => {
 .fade-leave-to {
   opacity: 0;
 }
+
 </style>

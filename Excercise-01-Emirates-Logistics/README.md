@@ -136,6 +136,8 @@ If the Vercel project root is set to `frontend`, no additional rewrite file is n
 
 ## Demo Flow
 
+Use the **Tour** button in the application header for a quick guided orientation through personas, navigation, and the current workflow.
+
 1. **Login**
    - Select a persona: Operations Admin, Customer Portal, or Vendor Portal.
 
