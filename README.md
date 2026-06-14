@@ -10,6 +10,9 @@ Each exercise is treated as a standalone product slice: it has its own brief, do
 | --- | --- | --- | --- | --- |
 | [Exercise 01 - Emirates Logistics](./Excercise-01-Emirates-Logistics) | Transport Management System | Active | [Open demo](https://pocs-with-ai.vercel.app/admin/dashboard) | Role-based TMS proof of concept for Admin, Customer, and Vendor workflows across booking, trip scheduling, live tracking, and billing settlement. |
 
+## Glimpses
+<img width="1919" height="1139" alt="image" src="https://github.com/user-attachments/assets/02c0fda9-d56e-4e6d-af84-b0aec0cb3461" />
+
 ## Repository Goals
 
 - Build realistic product demos from structured business briefs.
@@ -17,9 +20,6 @@ Each exercise is treated as a standalone product slice: it has its own brief, do
 - Keep each POC easy to run, inspect, and deploy.
 - Document assumptions, demo flow, and implementation boundaries.
 - Use reusable UI patterns where they make the prototype feel production-minded.
-
-## Glipses
-<img width="1919" height="1139" alt="image" src="https://github.com/user-attachments/assets/02c0fda9-d56e-4e6d-af84-b0aec0cb3461" />
 
 
 ## Project Structure
