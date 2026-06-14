@@ -18,6 +18,10 @@ Each exercise is treated as a standalone product slice: it has its own brief, do
 - Document assumptions, demo flow, and implementation boundaries.
 - Use reusable UI patterns where they make the prototype feel production-minded.
 
+## Glipses
+<img width="1919" height="1139" alt="image" src="https://github.com/user-attachments/assets/02c0fda9-d56e-4e6d-af84-b0aec0cb3461" />
+
+
 ## Project Structure
 
 ```text
