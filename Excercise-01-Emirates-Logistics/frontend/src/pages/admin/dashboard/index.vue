@@ -36,14 +36,16 @@
       <Card class="kpi-card flex-1">
         <template #content>
           <div class="kpi-body">
-            <div class="kpi-icon-box orange">
-              <i class="pi pi-clock"></i>
+            <div class="kpi-topline">
+              <div class="kpi-info-stack">
+                <span class="kpi-title">Pending Dispatch</span>
+                <span class="kpi-value">{{ pendingCount }}</span>
+              </div>
+              <div class="kpi-icon-box orange">
+                <i class="pi pi-clock"></i>
+              </div>
             </div>
-            <div class="kpi-info-stack mt-4">
-              <span class="kpi-value">{{ pendingCount }}</span>
-              <span class="kpi-title">Pending Dispatch</span>
-            </div>
-            <div class="kpi-trend mt-3 flex-row align-center gap-1 text-warn text-2xs font-semibold">
+            <div class="kpi-trend warning">
               <i class="pi pi-exclamation-triangle"></i>
               <span>Needs transporter booking</span>
             </div>
@@ -55,14 +57,16 @@
       <Card class="kpi-card flex-1">
         <template #content>
           <div class="kpi-body">
-            <div class="kpi-icon-box blue">
-              <i class="pi pi-sync"></i>
+            <div class="kpi-topline">
+              <div class="kpi-info-stack">
+                <span class="kpi-title">Active Transits</span>
+                <span class="kpi-value">{{ activeCount }}</span>
+              </div>
+              <div class="kpi-icon-box blue">
+                <i class="pi pi-sync"></i>
+              </div>
             </div>
-            <div class="kpi-info-stack mt-4">
-              <span class="kpi-value">{{ activeCount }}</span>
-              <span class="kpi-title">Active Transits</span>
-            </div>
-            <div class="kpi-trend mt-3 flex-row align-center gap-1 text-success text-2xs font-semibold">
+            <div class="kpi-trend">
               <i class="pi pi-arrow-up-right"></i>
               <span>Monitored on Control Tower</span>
             </div>
@@ -74,14 +78,16 @@
       <Card class="kpi-card flex-1">
         <template #content>
           <div class="kpi-body">
-            <div class="kpi-icon-box completed">
-              <i class="pi pi-check-circle"></i>
+            <div class="kpi-topline">
+              <div class="kpi-info-stack">
+                <span class="kpi-title">Completed Legs</span>
+                <span class="kpi-value">{{ completedCount }}</span>
+              </div>
+              <div class="kpi-icon-box completed">
+                <i class="pi pi-check-circle"></i>
+              </div>
             </div>
-            <div class="kpi-info-stack mt-4">
-              <span class="kpi-value">{{ completedCount }}</span>
-              <span class="kpi-title">Completed Legs</span>
-            </div>
-            <div class="kpi-trend mt-3 flex-row align-center gap-1 text-success text-2xs font-semibold">
+            <div class="kpi-trend">
               <i class="pi pi-arrow-up-right"></i>
               <span>Closed movement legs</span>
             </div>
@@ -93,14 +99,16 @@
       <Card class="kpi-card flex-1">
         <template #content>
           <div class="kpi-body">
-            <div class="kpi-icon-box navy">
-              <i class="pi pi-wallet"></i>
+            <div class="kpi-topline">
+              <div class="kpi-info-stack">
+                <span class="kpi-title">Total Billed Revenue</span>
+                <span class="kpi-value">{{ totalRevenue.toLocaleString() }} AED</span>
+              </div>
+              <div class="kpi-icon-box navy">
+                <i class="pi pi-wallet"></i>
+              </div>
             </div>
-            <div class="kpi-info-stack mt-4">
-              <span class="kpi-value">{{ totalRevenue.toLocaleString() }} AED</span>
-              <span class="kpi-title">Total Billed Revenue</span>
-            </div>
-            <div class="kpi-trend mt-3 flex-row align-center gap-1 text-success text-2xs font-semibold">
+            <div class="kpi-trend">
               <i class="pi pi-check"></i>
               <span>Reconciled billing value</span>
             </div>
@@ -585,14 +593,36 @@ const areaChartOptions = computed(() => {
 .kpi-body {
   display: flex;
   flex-direction: column;
+  gap: 14px;
+  min-height: 96px;
+}
+
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brand-navy), var(--brand-orange));
+  opacity: 0.72;
+}
+
+.kpi-topline {
+  display: flex;
   align-items: flex-start;
-  min-height: 118px;
+  justify-content: space-between;
+  gap: 14px;
 }
 
 .kpi-icon-box {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 7px;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -634,21 +664,26 @@ const areaChartOptions = computed(() => {
 .kpi-info-stack {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
+  min-width: 0;
 }
 
 .kpi-value {
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 25px;
+  font-weight: 750;
   font-family: var(--font-family);
   color: var(--text-color);
   line-height: 1;
+  letter-spacing: -0.01em;
 }
 
 .kpi-title {
-  font-size: 12px;
-  font-weight: 550;
+  order: -1;
+  font-size: 11px;
+  font-weight: 750;
   color: var(--text-color-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* Charts Grid */
@@ -873,11 +908,29 @@ const areaChartOptions = computed(() => {
 }
 
 .kpi-trend {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 30px;
+  padding: 7px 9px;
+  border: 1px solid var(--surface-border);
+  border-radius: 7px;
+  background: var(--surface-b);
   color: var(--text-color-secondary) !important;
+  font-size: 11.5px;
+  font-weight: 650;
+  line-height: 1.2;
 }
 
-.kpi-trend {
-  font-weight: 550;
+.kpi-trend i {
+  color: var(--brand-orange);
+  font-size: 12px;
+}
+
+.kpi-trend.warning {
+  background: rgba(254, 150, 5, 0.06);
+  border-color: rgba(254, 150, 5, 0.16);
 }
 
 /* Bottom 2-Table grid */

@@ -94,10 +94,25 @@
         </div>
         <div class="header-right">
           <!-- Quick Role Selector using PrimeVue Select -->
-          <div class="demo-switcher flex align-center gap-2">
-            <span class="switcher-label">Demo Persona:</span>
-            <Select v-model="store.currentUser" :options="roleOptions" optionLabel="label" optionValue="value"
-              @change="switchRole" class="role-select" />
+          <div class="demo-switcher" :class="`persona-${store.currentUser}`">
+            <div class="persona-badge">
+              <i :class="currentPersona.icon"></i>
+            </div>
+            <div class="persona-copy">
+              <span class="switcher-label">Persona</span>
+              <Select v-model="store.currentUser" :options="roleOptions" optionLabel="label" optionValue="value"
+                @change="switchRole" class="role-select">
+                <template #value="slotProps">
+                  <span class="persona-value">{{ slotProps.value ? currentPersona.label : 'Select role' }}</span>
+                </template>
+                <template #option="slotProps">
+                  <div class="persona-option">
+                    <i :class="slotProps.option.icon"></i>
+                    <span>{{ slotProps.option.label }}</span>
+                  </div>
+                </template>
+              </Select>
+            </div>
           </div>
 
           <!-- Theme Switcher -->
@@ -135,10 +150,14 @@ const route = useRoute();
 const router = useRouter();
 
 const roleOptions = [
-  { label: 'Admin', value: 'admin' },
-  { label: 'Customer', value: 'customer' },
-  { label: 'Vendor', value: 'vendor' }
+  { label: 'Operations Admin', value: 'admin', icon: 'pi pi-shield' },
+  { label: 'Customer Portal', value: 'customer', icon: 'pi pi-building' },
+  { label: 'Vendor Portal', value: 'vendor', icon: 'pi pi-truck' }
 ];
+
+const currentPersona = computed(() => {
+  return roleOptions.find(option => option.value === store.currentUser) || roleOptions[0];
+});
 
 // Compute the current active role from route prefix
 const role = computed(() => {
@@ -374,17 +393,94 @@ const logout = () => {
 .demo-switcher {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  min-height: 42px;
+  padding: 5px 8px 5px 6px;
+  background:
+    linear-gradient(135deg, rgba(5, 18, 88, 0.035), rgba(254, 150, 5, 0.04)),
+    var(--surface-a);
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.demo-switcher:hover {
+  border-color: rgba(254, 150, 5, 0.35);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.persona-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background: var(--brand-navy);
+  font-size: 13px;
+}
+
+.persona-customer .persona-badge {
+  background: #24356f;
+}
+
+.persona-vendor .persona-badge {
+  background: var(--brand-orange);
+}
+
+.persona-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .switcher-label {
-  font-size: 12px;
+  font-size: 10px;
   color: var(--text-color-secondary);
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .role-select {
-  width: 130px;
+  width: 160px;
+}
+
+.role-select :deep(.p-select) {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  min-height: 18px;
+}
+
+.role-select :deep(.p-select-label) {
+  padding: 0 !important;
+}
+
+.role-select :deep(.p-select-dropdown) {
+  width: 20px;
+}
+
+.persona-value {
+  color: var(--text-color);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.persona-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.persona-option i {
+  color: var(--brand-orange);
+  font-size: 13px;
 }
 
 .logout-btn {
