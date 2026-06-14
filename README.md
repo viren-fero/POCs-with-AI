@@ -6,9 +6,9 @@ Each exercise is treated as a standalone product slice: it has its own brief, do
 
 ## Current Exercises
 
-| Exercise | Domain | Status | Summary |
-| --- | --- | --- | --- |
-| [Exercise 01 - Emirates Logistics](./Excercise-01-Emirates-Logistics) | Transport Management System | Active | Role-based TMS proof of concept for Admin, Customer, and Vendor workflows across booking, trip scheduling, live tracking, and billing settlement. |
+| Exercise | Domain | Status | Live Demo | Summary |
+| --- | --- | --- | --- | --- |
+| [Exercise 01 - Emirates Logistics](./Excercise-01-Emirates-Logistics) | Transport Management System | Active | [Open demo](https://pocs-with-ai.vercel.app/) | Role-based TMS proof of concept for Admin, Customer, and Vendor workflows across booking, trip scheduling, live tracking, and billing settlement. |
 
 ## Repository Goals
 

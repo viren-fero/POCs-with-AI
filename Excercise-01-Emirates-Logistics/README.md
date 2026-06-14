@@ -4,6 +4,10 @@ A modern Transport Management System proof of concept for Emirates Logistics, fo
 
 The application demonstrates how a centralized TMS can move an order from customer booking to vendor assignment, live trip tracking, milestone execution, and billing settlement.
 
+## Live Demo
+
+[Open Emirates Logistics TMS-V2 POC](https://pocs-with-ai.vercel.app/)
+
 ## Product Snapshot
 
 **Client:** Emirates Logistics, Dubai  
